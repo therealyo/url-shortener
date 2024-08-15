@@ -1,0 +1,39 @@
+services:
+  url-shortener:
+    image: url-shortener
+    container_name: url-shortener
+
+    depends_on:
+      - mongodb
+      - redis
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    command: sleep infinity
+    env_file: .env
+    volumes:
+      - .:/app
+    ports:
+      - '3000:3000'
+
+  mongodb:
+    image: mongo:6-jammy
+    ports:
+      - '27017:27017'
+    volumes:
+      - mongo-data:/data/db
+
+  redis:
+    image: redis:7.4.0-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    environment:
+      - REDIS_PASSWORD=secret
+    volumes:
+      - cache:/data
+
+volumes:
+  mongo-data:
+  cache:
