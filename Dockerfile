@@ -13,7 +13,8 @@ RUN npm install -g yarn@$YARN_VERSION --force
 FROM base as build
 
 RUN apt-get update -qq && \
-    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3
+    apt-get install --no-install-recommends -y build-essential node-gyp pkg-config python-is-python3 procps && rm -rf /var/lib/apt/lists/*
+
 
 COPY --link package.json yarn.lock ./
 RUN yarn install --frozen-lockfile --production=false
